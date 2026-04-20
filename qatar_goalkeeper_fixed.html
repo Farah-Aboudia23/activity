@@ -1,0 +1,449 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.root{font-family:'Tajawal',sans-serif;direction:rtl;position:relative;width:100%;height:620px;overflow:hidden;background:#000;cursor:none}
+.panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center;z-index:30;background:rgba(0,0,0,.82)}
+.hidden{display:none!important}
+.scoreboard{position:absolute;top:14px;right:18px;z-index:20;background:rgba(141,27,61,.92);border:2px solid #DAA520;border-radius:10px;padding:6px 16px;text-align:center}
+.sc-lbl{font-size:11px;color:#DAA520;font-weight:700;letter-spacing:1px}
+.sc-n{font-size:30px;font-weight:900;color:#fff;line-height:1.1}
+.hint{position:absolute;bottom:8px;width:100%;text-align:center;color:rgba(255,255,255,.55);font-size:12px;font-family:'Tajawal',sans-serif;z-index:20;pointer-events:none}
+.btn{background:#8D1B3D;color:#fff;border:2px solid #DAA520;border-radius:8px;padding:11px 32px;font-size:18px;font-family:'Tajawal',sans-serif;font-weight:700;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:scale(1.06)}
+.btn-green{background:#1a6030;border-color:#3a9050}
+.intro-logo{font-size:50px;margin-bottom:6px;animation:afloat 3s ease-in-out infinite}
+.intro-title{font-size:21px;font-weight:900;color:#DAA520;margin-bottom:8px;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.intro-card{background:rgba(141,27,61,.45);border:1.5px solid #8D1B3D;border-radius:12px;padding:12px 18px;max-width:400px;margin:0 auto 14px}
+.intro-card p{font-size:14px;color:#f5dda0;line-height:1.85}
+.hl{color:#fff;font-weight:700}
+.trophy-anim{font-size:60px;animation:abounce .65s infinite alternate;margin-bottom:4px}
+.win-title{font-size:32px;font-weight:900;color:#DAA520;text-shadow:0 2px 10px rgba(218,165,32,.5);margin-bottom:4px}
+.win-sub{font-size:15px;color:#ccc;margin-bottom:10px}
+.lesson-card{background:rgba(0,0,0,.75);border:2.5px solid #DAA520;border-radius:14px;padding:16px 24px;max-width:430px;width:100%;margin:0 auto 10px}
+.lesson-label{font-size:11px;color:#DAA520;letter-spacing:2px;font-weight:700;margin-bottom:5px}
+.lesson-title-big{font-size:24px;font-weight:900;color:#fff;text-shadow:0 0 18px rgba(218,165,32,.6);line-height:1.3}
+.lesson-sub{font-size:13px;color:#b0d0b0;margin-top:9px;line-height:1.8;border-top:1px solid rgba(218,165,32,.3);padding-top:9px}
+.lesson-sub span{color:#DAA520;font-weight:700}
+.id-badge{background:rgba(141,27,61,.35);border:1px solid rgba(141,27,61,.7);border-radius:10px;padding:8px 16px;max-width:430px;width:100%;margin:0 auto 10px}
+.id-badge p{font-size:13px;color:#f0c890;line-height:1.8}
+@keyframes afloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes abounce{from{transform:translateY(0)}to{transform:translateY(-13px)}}
+</style>
+
+<div class="root" id="root">
+
+<!-- BACKGROUND SCENE -->
+<svg id="bgSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 680 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <!-- sky -->
+  <rect x="0" y="0" width="680" height="280" fill="#16082a"/>
+  <rect x="0" y="210" width="680" height="70" fill="#6b2208" opacity=".55"/>
+  <rect x="0" y="248" width="680" height="52" fill="#c04808" opacity=".28"/>
+  <!-- stars -->
+  <circle cx="55" cy="35" r="1.2" fill="#fff" opacity=".9"/><circle cx="110" cy="20" r="1" fill="#fff" opacity=".8"/>
+  <circle cx="190" cy="50" r="1.4" fill="#fff" opacity=".7"/><circle cx="290" cy="15" r="1" fill="#fff" opacity=".85"/>
+  <circle cx="370" cy="42" r="1.2" fill="#fff" opacity=".6"/><circle cx="445" cy="28" r="1" fill="#fff" opacity=".9"/>
+  <circle cx="520" cy="55" r="1.3" fill="#fff" opacity=".75"/><circle cx="600" cy="18" r="1" fill="#fff" opacity=".8"/>
+  <circle cx="80" cy="75" r="1" fill="#fff" opacity=".5"/><circle cx="255" cy="82" r="1" fill="#fff" opacity=".7"/>
+  <!-- moon -->
+  <circle cx="575" cy="65" r="23" fill="#f5c842"/><circle cx="589" cy="58" r="19" fill="#16082a"/>
+  <!-- Doha skyline -->
+  <rect x="25" y="215" width="20" height="85" fill="#0b0618"/><rect x="48" y="198" width="16" height="102" fill="#100824"/>
+  <polygon points="48,198 56,178 64,198" fill="#100824"/>
+  <polygon points="93,300 100,188 107,300" fill="#0b0618"/>
+  <rect x="92" y="298" width="16" height="32" fill="#0b0618"/>
+  <ellipse cx="100" cy="186" rx="9" ry="17" fill="#c04808" opacity=".8"/>
+  <rect x="130" y="205" width="24" height="95" fill="#0b0618"/><rect x="157" y="192" width="20" height="108" fill="#100824"/>
+  <polygon points="157,192 167,172 177,192" fill="#100824"/>
+  <rect x="210" y="224" width="44" height="76" fill="#0b0618"/>
+  <ellipse cx="232" cy="224" rx="26" ry="16" fill="#0b0618"/>
+  <rect x="270" y="207" width="22" height="93" fill="#100824"/><rect x="295" y="194" width="18" height="106" fill="#0b0618"/>
+  <polygon points="295,194 304,176 313,194" fill="#0b0618"/>
+  <rect x="368" y="188" width="20" height="112" fill="#0b0618"/><rect x="391" y="193" width="20" height="107" fill="#100824"/>
+  <rect x="415" y="210" width="26" height="90" fill="#0b0618"/><rect x="444" y="200" width="18" height="100" fill="#100824"/>
+  <rect x="482" y="205" width="22" height="95" fill="#100824"/>
+  <polygon points="482,205 493,185 504,205" fill="#100824"/>
+  <rect x="527" y="208" width="20" height="92" fill="#0b0618"/><rect x="567" y="200" width="24" height="100" fill="#0b0618"/>
+  <rect x="616" y="197" width="22" height="103" fill="#0b0618"/><rect x="641" y="212" width="18" height="88" fill="#100824"/>
+  <!-- bay -->
+  <rect x="0" y="298" width="680" height="20" fill="#192840"/>
+  <line x1="30" y1="305" x2="130" y2="305" stroke="#2a4a7a" stroke-width="1.2" opacity=".6"/>
+  <line x1="200" y1="308" x2="330" y2="308" stroke="#2a4a7a" stroke-width="1" opacity=".5"/>
+  <line x1="400" y1="305" x2="510" y2="305" stroke="#2a4a7a" stroke-width="1.2" opacity=".55"/>
+  <!-- grass -->
+  <rect x="0" y="316" width="680" height="304" fill="#1d6b1d"/>
+  <rect x="0" y="316" width="680" height="37" fill="#226e22"/>
+  <rect x="0" y="353" width="680" height="37" fill="#1d6b1d"/>
+  <rect x="0" y="390" width="680" height="37" fill="#226e22"/>
+  <rect x="0" y="427" width="680" height="37" fill="#1d6b1d"/>
+  <rect x="0" y="464" width="680" height="37" fill="#226e22"/>
+  <rect x="0" y="501" width="680" height="119" fill="#1d6b1d"/>
+  <!-- pitch lines -->
+  <rect x="100" y="316" width="480" height="290" fill="none" stroke="#fff" stroke-width="2.2" opacity=".8"/>
+  <line x1="340" y1="316" x2="340" y2="606" stroke="#fff" stroke-width="2" opacity=".8"/>
+  <circle cx="340" cy="461" r="55" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>
+  <circle cx="340" cy="461" r="3.5" fill="#fff" opacity=".9"/>
+  <rect x="205" y="316" width="270" height="78" fill="none" stroke="#fff" stroke-width="1.8" opacity=".8"/>
+  <rect x="255" y="316" width="170" height="40" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/>
+  <circle cx="340" cy="376" r="3" fill="#fff" opacity=".9"/>
+  <!-- palm trees -->
+  <rect x="44" y="326" width="7" height="68" fill="#4a2808"/>
+  <ellipse cx="47" cy="326" rx="24" ry="13" fill="#1e5818" opacity=".9"/>
+  <ellipse cx="33" cy="321" rx="16" ry="9" fill="#236a1e" opacity=".85"/>
+  <ellipse cx="62" cy="323" rx="17" ry="9" fill="#1a5016" opacity=".8"/>
+  <rect x="628" y="329" width="7" height="64" fill="#4a2808"/>
+  <ellipse cx="631" cy="329" rx="24" ry="13" fill="#1e5818" opacity=".9"/>
+  <ellipse cx="617" cy="324" rx="16" ry="9" fill="#236a1e" opacity=".85"/>
+  <ellipse cx="646" cy="326" rx="17" ry="9" fill="#1a5016" opacity=".8"/>
+  <!-- Qatar flag strip -->
+  <rect x="0" y="0" width="110" height="9" fill="#fff"/>
+  <rect x="110" y="0" width="570" height="9" fill="#8D1B3D"/>
+  <polygon points="110,0 120,4.5 110,9 100,4.5" fill="#8D1B3D"/>
+  <polygon points="125,0 135,4.5 125,9 115,4.5" fill="#fff"/>
+  <polygon points="140,0 150,4.5 140,9 130,4.5" fill="#8D1B3D"/>
+  <polygon points="155,0 165,4.5 155,9 145,4.5" fill="#fff"/>
+
+  <!-- ══ GOAL NET — perspective mesh ══ -->
+  <!-- back posts shadow -->
+  <rect x="194" y="286" width="294" height="7" fill="#777" rx="2"/>
+  <rect x="194" y="286" width="8" height="54" fill="#888"/>
+  <rect x="480" y="286" width="8" height="54" fill="#888"/>
+  <!-- crossbar front -->
+  <rect x="210" y="293" width="262" height="9" fill="#eee" rx="4"/>
+  <!-- left post -->
+  <rect x="210" y="293" width="9" height="50" fill="#eee" rx="2"/>
+  <!-- right post -->
+  <rect x="463" y="293" width="9" height="50" fill="#eee" rx="2"/>
+  <!-- net back fill -->
+  <rect x="199" y="289" width="284" height="50" fill="#fff" opacity=".06"/>
+  <!-- horizontal net lines -->
+  <line x1="199" y1="293" x2="483" y2="293" stroke="#fff" stroke-width=".6" opacity=".5"/>
+  <line x1="201" y1="298" x2="481" y2="298" stroke="#fff" stroke-width=".6" opacity=".5"/>
+  <line x1="203" y1="304" x2="479" y2="304" stroke="#fff" stroke-width=".7" opacity=".55"/>
+  <line x1="205" y1="311" x2="477" y2="311" stroke="#fff" stroke-width=".8" opacity=".6"/>
+  <line x1="207" y1="319" x2="475" y2="319" stroke="#fff" stroke-width=".9" opacity=".65"/>
+  <line x1="209" y1="329" x2="473" y2="329" stroke="#fff" stroke-width="1" opacity=".7"/>
+  <line x1="210" y1="340" x2="472" y2="340" stroke="#ccc" stroke-width="1.1" opacity=".6"/>
+  <!-- vertical net lines (converging) -->
+  <line x1="220" y1="293" x2="217" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="238" y1="293" x2="233" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="256" y1="293" x2="249" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="274" y1="293" x2="265" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="292" y1="293" x2="281" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="310" y1="293" x2="297" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="328" y1="293" x2="313" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="341" y1="293" x2="341" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="354" y1="293" x2="369" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="372" y1="293" x2="385" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="390" y1="293" x2="401" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="408" y1="293" x2="417" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="426" y1="293" x2="433" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="444" y1="293" x2="449" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <line x1="462" y1="293" x2="465" y2="340" stroke="#fff" stroke-width=".7" opacity=".5"/>
+  <!-- net floor shadow -->
+  <rect x="210" y="340" width="262" height="5" fill="#000" opacity=".2"/>
+</svg>
+
+<!-- KEEPER canvas-drawn via JS -->
+<canvas id="keeperCanvas" style="position:absolute;pointer-events:none;z-index:15" width="88" height="96"></canvas>
+
+<!-- BALL canvas-drawn via JS -->
+<canvas id="ballCanvas" style="position:absolute;pointer-events:none;z-index:16" width="36" height="36"></canvas>
+
+<div class="scoreboard">
+  <div class="sc-lbl">SCORE</div>
+  <div class="sc-n" id="scN">0</div>
+</div>
+
+<div class="hint" id="hintBar">حرّكي الفأرة يميناً ويساراً — أو اضغطي ← → لتحريك الحارسة</div>
+
+<!-- INTRO -->
+<div class="panel" id="introPanel">
+  <div class="intro-logo">🇶🇦</div>
+  <div class="intro-title">قطر تستضيف — وأنتِ تبرمجين!</div>
+  <div class="intro-card">
+    <p>
+      <span class="hl">🏟️ كأس العالم 2022</span> — أول بطولة عربية وخليجية في التاريخ<br>
+      المهندسون القطريون بنوا <span class="hl">8 ملاعب</span> بتصميم <span class="hl">موحّد ومتكرر</span><br>
+      تمامًا كما نستخدم <span class="hl">الدوال</span> لتجنّب تكرار الكود 🚀
+    </p>
+  </div>
+  <p style="font-size:13px;color:#aaa;margin-bottom:14px">العبي والتقطي 3 كرات لتكتشفي عنوان درسنا اليوم!</p>
+  <button class="btn" id="startBtn">🏆 ابدئي اللعب</button>
+</div>
+
+<!-- WIN -->
+<div class="panel hidden" id="winPanel">
+  <div class="trophy-anim">🏆</div>
+  <div class="win-title">YOU WIN!</div>
+  <div class="win-sub">أحسنتِ يا حارسة قطر! 🎉</div>
+  <div class="lesson-card">
+    <div class="lesson-label">📚 درس اليوم</div>
+    <div class="lesson-title-big">إنشاء واستخدام الدوال</div>
+    <div class="lesson-sub">
+      في اللعبة، كود <span>"تحريك الكرة"</span> و<span>"التحقق من الإمساك"</span> يتكرران كل جولة.<br>
+      الحل الذكي؟ نضعه داخل <span>دالة</span> ونستدعيها متى أردنا — تمامًا كما وحّد<br>
+      المهندسون القطريون <span>تصميم الملاعب الثمانية</span> في نموذج واحد!
+    </div>
+  </div>
+  <div class="id-badge">
+    <p>🇶🇦 <strong style="color:#fff">قطر تُعلّمنا:</strong> العقل المنظّم يبني المستحيل. أنتِ اليوم تتعلمين مهارة المهندسين: <strong style="color:#ffe090">الدوال!</strong></p>
+  </div>
+  <button class="btn btn-green" id="restartBtn">🔄 العب مجدداً</button>
+</div>
+
+</div>
+
+<script>
+(function(){
+  const root       = document.getElementById('root');
+  const kCanvas    = document.getElementById('keeperCanvas');
+  const bCanvas    = document.getElementById('ballCanvas');
+  const kCtx       = kCanvas.getContext('2d');
+  const bCtx       = bCanvas.getContext('2d');
+  const scN        = document.getElementById('scN');
+  const introPanel = document.getElementById('introPanel');
+  const winPanel   = document.getElementById('winPanel');
+
+  const KW = 88, KH = 96;
+  const BW = 36;
+
+  /* ── draw keeper ── */
+  function drawKeeper(ctx){
+    ctx.clearRect(0,0,KW,KH);
+    /* shadow */
+    ctx.save(); ctx.globalAlpha=.25;
+    ctx.beginPath(); ctx.ellipse(44,93,20,4,0,0,Math.PI*2); ctx.fillStyle='#000'; ctx.fill();
+    ctx.restore();
+    /* legs */
+    ctx.fillStyle='#1a3a8a';
+    roundRect(ctx,30,62,10,28,4); roundRect(ctx,48,62,10,28,4);
+    /* boots */
+    ctx.fillStyle='#111';
+    roundRect(ctx,27,86,16,8,3); roundRect(ctx,45,86,16,8,3);
+    /* body */
+    ctx.fillStyle='#e8c020';
+    roundRect(ctx,24,36,40,30,6);
+    /* stripes */
+    ctx.globalAlpha=.4; ctx.strokeStyle='#c09010'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.moveTo(34,36); ctx.lineTo(34,66); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(54,36); ctx.lineTo(54,66); ctx.stroke();
+    ctx.globalAlpha=1;
+    /* left arm (full width stretch) */
+    ctx.fillStyle='#e8c020';
+    roundRect(ctx,0,33,27,10,5);
+    /* left glove */
+    ctx.fillStyle='#e03030';
+    ctx.beginPath(); ctx.ellipse(6,38,8,7,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#c02020'; ctx.lineWidth=1.2;
+    for(let y=34;y<=43;y+=3){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(13,y); ctx.stroke(); }
+    /* right arm */
+    ctx.fillStyle='#e8c020';
+    roundRect(ctx,61,33,27,10,5);
+    /* right glove */
+    ctx.fillStyle='#e03030';
+    ctx.beginPath(); ctx.ellipse(82,38,8,7,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#c02020'; ctx.lineWidth=1.2;
+    for(let y=34;y<=43;y+=3){ ctx.beginPath(); ctx.moveTo(69,y); ctx.lineTo(88,y); ctx.stroke(); }
+    /* neck */
+    ctx.fillStyle='#d4956a'; roundRect(ctx,38,23,12,15,4);
+    /* head */
+    ctx.fillStyle='#d4956a';
+    ctx.beginPath(); ctx.ellipse(44,16,14,16,0,0,Math.PI*2); ctx.fill();
+    /* hair */
+    ctx.fillStyle='#2a1a0a';
+    ctx.beginPath(); ctx.ellipse(44,5,14,10,0,0,Math.PI*2); ctx.fill();
+    /* eyes */
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.ellipse(37,16,3,3,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(51,16,3,3,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#1a0a00';
+    ctx.beginPath(); ctx.ellipse(37,16,1.3,1.3,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(51,16,1.3,1.3,0,0,Math.PI*2); ctx.fill();
+    /* jersey number */
+    ctx.fillStyle='#1a3a8a'; ctx.font='bold 11px Arial'; ctx.textAlign='center';
+    ctx.fillText('1',44,56);
+    /* Qatar flag sleeve */
+    ctx.fillStyle='#8D1B3D'; roundRect(ctx,25,39,12,8,1);
+    ctx.fillStyle='#fff'; roundRect(ctx,25,39,4,8,1);
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath(); ctx.fill();
+  }
+
+  /* ── draw ball ── */
+  function drawBall(ctx){
+    ctx.clearRect(0,0,BW,BW);
+    const cx=BW/2, cy=BW/2, r=BW/2-2;
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#333'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+    /* pentagon pattern */
+    ctx.fillStyle='#222';
+    const pts=[[cx,cy-r*.45],[cx+r*.4,cy-r*.14],[cx+r*.25,cy+r*.37],[cx-r*.25,cy+r*.37],[cx-r*.4,cy-r*.14]];
+    ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]);
+    pts.forEach(p=>ctx.lineTo(p[0],p[1])); ctx.closePath(); ctx.fill();
+    pts.forEach(function(p,i){
+      ctx.beginPath(); ctx.moveTo(p[0],p[1]);
+      ctx.lineTo(pts[(i+1)%5][0],pts[(i+1)%5][1]); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(cx,cy); ctx.stroke();
+    });
+  }
+
+  /* ── game state ── */
+  let score=0, kx=0, running=false;
+  let bx=0, by=0, bvx=0, bvy=0, ballLive=false, wait=0, raf=null;
+
+  /* GOAL boundaries in pixel coords (matches SVG) */
+  /* SVG viewBox 680×620 maps to actual element size */
+  function scaleX(svgX){ return svgX * root.offsetWidth / 680; }
+  function scaleY(svgY){ return svgY * root.offsetHeight / 620; }
+
+  const GOAL_LEFT_SVG  = 219;   /* inner left post */
+  const GOAL_RIGHT_SVG = 463;   /* inner right post */
+  const GOAL_TOP_SVG   = 293;   /* crossbar top */
+  const GOAL_BOT_SVG   = 342;   /* goal line */
+  const KEEPER_NET_Y_SVG = 348; /* keeper stands just below net */
+
+  function goalLeft(){ return scaleX(GOAL_LEFT_SVG); }
+  function goalRight(){ return scaleX(GOAL_RIGHT_SVG); }
+  function goalTop(){ return scaleY(GOAL_TOP_SVG); }
+  function keeperNetY(){ return scaleY(KEEPER_NET_Y_SVG); }
+
+  function initKeeper(){
+    kx = scaleX(GOAL_LEFT_SVG + (GOAL_RIGHT_SVG - GOAL_LEFT_SVG)/2) - KW/2;
+    placeKeeper();
+  }
+
+  function placeKeeper(){
+    /* clamp within goal posts */
+    const minX = goalLeft();
+    const maxX = goalRight() - KW;
+    kx = Math.max(minX, Math.min(maxX, kx));
+    kCanvas.style.left = kx + 'px';
+    kCanvas.style.top  = keeperNetY() + 'px';
+  }
+
+  function moveKeeper(dx){
+    kx += dx;
+    placeKeeper();
+  }
+
+  /* ball launch from bottom of screen toward goal */
+  function launch(){
+    const rW = root.offsetWidth;
+    const rH = root.offsetHeight;
+    bx = rW * 0.2 + Math.random() * rW * 0.6;
+    by = rH * 0.88;
+    /* target: random spot inside goal */
+    const tx = goalLeft() + 20 + Math.random() * (goalRight()-goalLeft()-40);
+    const ty = goalTop() + Math.random() * (scaleY(GOAL_BOT_SVG)-goalTop());
+    const dx = tx - bx, dy = ty - by;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const spd  = 4 + Math.random() * 2.5;
+    bvx = dx/dist * spd;
+    bvy = dy/dist * spd;
+    bCanvas.style.display = 'block';
+    bCanvas.style.left = bx + 'px';
+    bCanvas.style.top  = by + 'px';
+    ballLive = true;
+  }
+
+  function loop(){
+    if(!running) return;
+    if(!ballLive){
+      wait++;
+      if(wait > 60){ wait=0; launch(); }
+      raf = requestAnimationFrame(loop);
+      return;
+    }
+    bx += bvx; by += bvy;
+    bCanvas.style.left = bx + 'px';
+    bCanvas.style.top  = by + 'px';
+
+    /* catch detection: ball center vs keeper bounding box */
+    const ballCX = bx + BW/2;
+    const ballCY = by + BW/2;
+    const kLeft  = kx;
+    const kRight = kx + KW;
+    const kTop   = keeperNetY();
+    const kBot   = kTop + KH;
+
+    if(ballCX > kLeft && ballCX < kRight && ballCY > kTop && ballCY < kBot){
+      score++;
+      scN.textContent = score;
+      bCanvas.style.display = 'none';
+      ballLive = false;
+      if(score >= 3){ setTimeout(showWin, 380); return; }
+    }
+
+    /* missed (went past goal or out of screen) */
+    if(by + BW < 0 || by < goalTop() - 20){
+      bCanvas.style.display = 'none';
+      ballLive = false;
+    }
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  function showWin(){
+    running = false;
+    cancelAnimationFrame(raf);
+    winPanel.classList.remove('hidden');
+  }
+
+  function start(){
+    score = 0; scN.textContent = '0';
+    introPanel.classList.add('hidden');
+    winPanel.classList.add('hidden');
+    bCanvas.style.display = 'none';
+    ballLive = false; wait = 0;
+    initKeeper();
+    running = true;
+    raf = requestAnimationFrame(loop);
+  }
+
+  document.getElementById('startBtn').addEventListener('click', start);
+  document.getElementById('restartBtn').addEventListener('click', start);
+
+  /* keyboard */
+  document.addEventListener('keydown', e => {
+    if(!running) return;
+    if(e.key === 'ArrowLeft')  moveKeeper(-30);
+    if(e.key === 'ArrowRight') moveKeeper(+30);
+  });
+
+  /* mouse — track X relative to root */
+  root.addEventListener('mousemove', e => {
+    if(!running) return;
+    const r = root.getBoundingClientRect();
+    const mx = e.clientX - r.left;
+    kx = mx - KW/2;
+    placeKeeper();
+  });
+
+  /* touch */
+  let lastTX = null;
+  root.addEventListener('touchstart', e => { lastTX = e.touches[0].clientX; }, {passive:true});
+  root.addEventListener('touchmove', e => {
+    if(!running || lastTX === null) return;
+    const dx = e.touches[0].clientX - lastTX;
+    moveKeeper(dx * 1.0);
+    lastTX = e.touches[0].clientX;
+    e.preventDefault();
+  }, {passive:false});
+
+  /* pre-draw static elements */
+  drawKeeper(kCtx);
+  drawBall(bCtx);
+  initKeeper();
+})();
+</script>
