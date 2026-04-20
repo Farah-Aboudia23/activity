@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نشاط برمجي: جملة التكرار While</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-900: #1e3a5f;
+            --blue-700: #1d4ed8;
+            --blue-600: #2563eb;
+            --blue-500: #3b82f6;
+            --blue-100: #dbeafe;
+            --blue-50: #eff6ff;
+            --slate-800: #1e293b;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-400: #94a3b8;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            --green-500: #22c55e;
+            --red-500: #ef4444;
+            --violet-500: #8b5cf6;
+            --emerald-500: #10b981;
+            --amber-400: #fbbf24;
+            --rose-500: #f43f5e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f0f4ff;
+            min-height: 100vh;
+            color: var(--slate-800);
+        }
+
+        /* === MODALS === */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.hidden { display: none; }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .setup-icon {
+            width: 90px; height: 90px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px;
+            transform: rotate(3deg);
+            box-shadow: inset 0 2px 8px rgba(37,99,235,0.1);
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--slate-200);
+            border-radius: 14px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            text-align: right;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 12px;
+        }
+        input:focus { border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--blue-600);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+        }
+        .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            flex: 1;
+            background: var(--slate-100);
+            color: var(--slate-800);
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover { background: var(--slate-200); }
+
+        .teacher-btn-top {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--slate-50);
+            border: 1px solid var(--slate-200);
+            color: var(--slate-400);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin-bottom: 16px;
+            float: left;
+        }
+        .teacher-btn-top:hover { color: var(--blue-600); }
+
+        /* === MAIN CONTENT === */
+        #main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 16px 80px;
+            transition: opacity 0.5s;
+        }
+        #main-content.hidden { display: none; }
+        #main-content.opacity-0 { opacity: 0; }
+
+        header.main-header {
+            text-align: center;
+            padding: 48px 0 32px;
+        }
+        header.main-header h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--blue-900);
+            margin-bottom: 8px;
+        }
+        header.main-header p {
+            color: var(--slate-500);
+            font-size: 17px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--slate-200);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .two-col { display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+        .col-2-3 { flex: 2; min-width: 280px; padding: 32px; }
+        .col-1-3 { flex: 1; min-width: 220px; padding: 24px; background: var(--slate-100); border-radius: 20px; border: 1px solid var(--slate-200); }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-direction: row-reverse;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--blue-700);
+        }
+        .badge {
+            background: var(--blue-100);
+            color: #1e40af;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 8px;
+        }
+        .badge-orange {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        /* Hint box */
+        .hint-box {
+            background: var(--blue-50);
+            border-right: 4px solid var(--blue-500);
+            padding: 14px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e3a8a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Code editor area */
+        .code-area {
+            background: #f8f9fa;
+            border-radius: 14px;
+            border: 1px solid var(--slate-200);
+            padding: 24px;
+        }
+        .code-block {
+            background: #eaffff;
+            border: 1px solid #b2ebeb;
+            padding: 24px;
+            border-radius: 14px;
+        }
+
+        /* While row */
+        .while-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .while-label {
+            font-size: 22px;
+            font-weight: 900;
+            color: #111;
+        }
+        .key-chip {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ef4444;
+        }
+        .pressed-label { font-size: 18px; font-weight: 700; }
+
+        /* Drop zones */
+        .drop-zone {
+            border: 2px dashed #9ca3af;
+            min-height: 44px;
+            min-width: 160px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 8px;
+            margin: 0 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .drop-zone:hover { border-color: var(--blue-500); background: var(--blue-50); }
+        .drop-zone.has-item { border-style: solid; }
+
+        /* Correction overlays on drop zones */
+        .drop-zone.zone-correct { border-color: #22c55e !important; background: #f0fdf4 !important; }
+        .drop-zone.zone-wrong { border-color: #ef4444 !important; background: #fef2f2 !important; }
+        .zone-indicator {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .zone-indicator.correct { background: #22c55e; color: white; }
+        .zone-indicator.wrong { background: #ef4444; color: white; }
+
+        /* Body rows */
+        .body-section {
+            margin-right: 24px;
+            border-right: 2px solid #54d2d2;
+            padding-right: 24px;
+        }
+        .body-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .body-row:last-child { margin-bottom: 0; }
+        .body-label { font-size: 18px; font-weight: 700; color: #111; width: 80px; text-align: right; }
+        .none-label { font-size: 13px; font-weight: 700; color: #f87171; }
+
+        /* Labels bank */
+        .labels-bank-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+        #labels-container { display: flex; flex-direction: column; gap: 12px; }
+
+        .drag-item {
+            cursor: pointer;
+            padding: 14px 16px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .drag-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .drag-item.selected { outline: 4px solid var(--blue-500); outline-offset: 2px; }
+        .drag-item.disabled { cursor: default; pointer-events: none; opacity: 0.85; }
+
+        /* MCQ */
+        .mcq-card { padding: 32px; margin-bottom: 24px; }
+        .question-block { background: var(--slate-50); padding: 24px; border-radius: 16px; border: 1px solid var(--slate-100); margin-bottom: 24px; }
+        .question-block:last-child { margin-bottom: 0; }
+        .question-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-direction: row-reverse; }
+        .question-text { font-size: 17px; font-weight: 700; color: var(--slate-800); flex: 1; }
+        .mcq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 600px) { .mcq-grid { grid-template-columns: 1fr; } }
+
+        .mcq-option {
+            border: 2px solid var(--slate-200);
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: white;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--slate-800);
+            position: relative;
+        }
+        .mcq-option:hover { border-color: #93c5fd; background: #f0f9ff; }
+        .mcq-option.selected { border-color: var(--blue-500); background: var(--blue-50); font-weight: 700; color: #1e40af; }
+        .mcq-option.mcq-correct { border-color: #22c55e !important; background: #f0fdf4 !important; color: #166534 !important; }
+        .mcq-option.mcq-wrong { border-color: #ef4444 !important; background: #fef2f2 !important; color: #991b1b !important; }
+        .mcq-option.mcq-reveal { border-color: #22c55e !important; background: #dcfce7 !important; color: #166534 !important; border-width: 3px !important; }
+        .mcq-option.disabled { cursor: default; pointer-events: none; }
+
+        /* Submit area */
+        .submit-area { text-align: center; margin-bottom: 80px; }
+        #btn-submit {
+            background: var(--blue-600);
+            color: white;
+            border: none;
+            padding: 18px 64px;
+            border-radius: 50px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(37,99,235,0.35);
+            transition: all 0.2s;
+        }
+        #btn-submit:hover { background: #1d4ed8; transform: translateY(-2px); }
+        #btn-submit:active { transform: scale(0.98); }
+
+        #result-card {
+            margin-top: 40px;
+            background: white;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: bounceIn 0.5s ease;
+        }
+        #result-card.hidden { display: none; }
+        #result-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+        #score-text { font-size: 64px; font-weight: 900; color: var(--green-500); margin-bottom: 8px; display: block; }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* === CELEBRATION MODAL === */
+        #celeb-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.3s;
+        }
+        #celeb-modal.hidden { display: none; }
+        .celeb-box {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        .celeb-icon { font-size: 64px; margin-bottom: 24px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .celeb-title { font-size: 38px; font-weight: 900; color: var(--blue-900); margin-bottom: 12px; }
+        .celeb-text { font-size: 18px; color: var(--slate-600); margin-bottom: 28px; line-height: 1.6; }
+        .celeb-score-box { background: var(--blue-50); padding: 24px; border-radius: 18px; margin-bottom: 28px; }
+        .celeb-score-label { display: block; color: var(--slate-500); font-size: 16px; margin-bottom: 4px; }
+        #celeb-score { font-size: 64px; font-weight: 900; color: var(--blue-600); display: block; }
+
+        /* === TEACHER DASHBOARD === */
+        #teacher-dashboard {
+            position: fixed;
+            inset: 0;
+            background: var(--slate-50);
+            z-index: 120;
+            display: flex;
+            flex-direction: column;
+        }
+        #teacher-dashboard.hidden { display: none; }
+
+        .teacher-header {
+            background: var(--blue-900);
+            color: white;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .teacher-header h1 { font-size: 24px; font-weight: 700; }
+        .teacher-header .stats { display: flex; gap: 24px; align-items: center; }
+        .stat-chip {
+            background: rgba(255,255,255,0.15);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .btn-close-teacher {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .btn-close-teacher:hover { background: #dc2626; }
+
+        .teacher-body { flex: 1; overflow-y: auto; padding: 32px; }
+
+        .teacher-table-wrap { background: white; border-radius: 16px; border: 1px solid var(--slate-200); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: right; }
+        thead { background: var(--slate-50); border-bottom: 2px solid var(--slate-200); }
+        th { padding: 16px 20px; font-size: 14px; font-weight: 700; color: var(--slate-600); }
+        tbody tr { border-bottom: 1px solid var(--slate-100); transition: background 0.15s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: var(--slate-50); }
+        td { padding: 16px 20px; font-size: 15px; }
+        .score-badge {
+            display: inline-block;
+            background: var(--blue-100);
+            color: #1e40af;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 15px;
+        }
+        .score-badge.high { background: #dcfce7; color: #166534; }
+        .score-badge.mid { background: #fef9c3; color: #713f12; }
+        .score-badge.low { background: #fee2e2; color: #991b1b; }
+
+        .btn-view {
+            background: var(--blue-600);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-left: 6px;
+        }
+        .btn-view:hover { background: #1d4ed8; }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-delete:hover { background: #ef4444; color: white; }
+
+        /* Detail Modal */
+        #detail-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 130;
+        }
+        #detail-modal.hidden { display: none; }
+        .detail-box {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 560px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+        .detail-header {
+            background: linear-gradient(135deg, var(--blue-900), #2563eb);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .detail-header h2 { font-size: 22px; font-weight: 700; }
+        .detail-body { padding: 28px 32px; }
+
+        .answer-section { margin-bottom: 28px; }
+        .answer-section h3 { font-size: 17px; font-weight: 700; color: var(--blue-700); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--blue-50); }
+        .answer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: var(--slate-50);
+        }
+        .answer-row.correct { background: #f0fdf4; border-right: 4px solid #22c55e; }
+        .answer-row.wrong { background: #fef2f2; border-right: 4px solid #ef4444; }
+        .answer-label { font-weight: 600; font-size: 15px; }
+        .answer-status { font-size: 18px; }
+        .answer-detail { font-size: 13px; color: var(--slate-500); margin-top: 2px; }
+
+        .detail-score {
+            background: var(--blue-50);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .detail-score-label { color: var(--slate-500); font-size: 15px; margin-bottom: 4px; }
+        .detail-score-num { font-size: 48px; font-weight: 900; color: var(--blue-600); }
+
+        .btn-close-detail {
+            background: var(--slate-100);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            color: white;
+            background: var(--blue-600);
+            transition: background 0.2s;
+        }
+        .btn-close-detail:hover { background: #1d4ed8; }
+
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--slate-400); }
+        .empty-state svg { margin: 0 auto 16px; display: block; }
+        .empty-state p { font-size: 17px; font-weight: 600; }
+
+        .error-msg { color: #ef4444; font-size: 14px; font-weight: 700; text-align: right; margin-bottom: 12px; display: none; }
+        .error-msg.show { display: block; }
+
+        .flex-gap { display: flex; gap: 10px; }
+
+        /* Correction summary panel */
+        #correction-panel {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--slate-200);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            animation: bounceIn 0.5s ease;
+        }
+        #correction-panel.hidden { display: none; }
+        .correction-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--blue-700);
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--blue-50);
+        }
+        .correction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 600px) { .correction-grid { grid-template-columns: 1fr; } }
+        .correction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .correction-item.correct { background: #f0fdf4; border: 1.5px solid #86efac; color: #166534; }
+        .correction-item.wrong { background: #fef2f2; border: 1.5px solid #fca5a5; color: #991b1b; }
+        .correction-item .ci-label { flex: 1; }
+        .correction-item .ci-status { font-size: 18px; margin-right: 8px; }
+        .correction-item .ci-correct-ans { font-size: 12px; color: #059669; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+<!-- ===== WELCOME / SETUP SCREEN ===== -->
+<div id="setup-screen" class="modal-overlay">
+    <div class="modal-box">
+        <div style="overflow:hidden; margin-bottom:16px;">
+            <button id="btn-outer-teacher" class="teacher-btn-top">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M17 3.13a4 4 0 0 1 0 7.75"/></svg>
+                دخول المعلمة
+            </button>
+        </div>
+        <div class="setup-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h2 style="font-size:30px;font-weight:900;color:var(--slate-800);margin-bottom:8px;">مرحباً بكِ!</h2>
+        <p style="color:var(--slate-600);font-weight:500;margin-bottom:24px;">مستعدة لتحدي حلقة التكرار While؟</p>
+        <input type="text" id="student-name" placeholder="ادخلي اسمكِ هنا...">
+        <div id="name-error" class="error-msg">الرجاء كتابة الاسم للبدء</div>
+        <button id="btn-start" class="btn-primary">ابدأ النشاط الآن</button>
+    </div>
+</div>
+
+<!-- ===== TEACHER AUTH MODAL ===== -->
+<div id="teacher-auth-modal" class="modal-overlay hidden">
+    <div class="modal-box" style="max-width:360px;">
+        <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">دخول المعلمة</h2>
+        <input type="password" id="teacher-password" placeholder="كلمة المرور">
+        <div id="pass-error" class="error-msg">كلمة المرور غير صحيحة</div>
+        <div class="flex-gap">
+            <button id="btn-cancel-teacher" class="btn-secondary">إلغاء</button>
+            <button id="btn-login-teacher" class="btn-primary" style="box-shadow:none;">دخول</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CELEBRATION MODAL ===== -->
+<div id="celeb-modal" class="hidden">
+    <div class="celeb-box">
+        <div id="celeb-icon" class="celeb-icon">🌟</div>
+        <h2 id="celeb-title" class="celeb-title">أحسنتِ يا بطلة!</h2>
+        <p id="celeb-text" class="celeb-text">لقد أتممتِ النشاط بنجاح مذهل!</p>
+        <div class="celeb-score-box">
+            <span class="celeb-score-label">درجتك النهائية</span>
+            <span id="celeb-score">0 / 6</span>
+        </div>
+        <button id="btn-close-celeb" class="btn-primary">مشاهدة التصحيح</button>
+    </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div id="main-content" class="hidden opacity-0">
+    <header class="main-header">
+        <h1>هيكلة جملة التكرار While</h1>
+        <p>أكملي النشاط العملي والأسئلة (6 درجات)</p>
+    </header>
+
+    <!-- Part 1 -->
+    <div class="two-col">
+        <div class="card col-2-3">
+            <div class="section-header">
+                <span class="badge">4 درجات</span>
+                <h2 class="section-title">1. النشاط العملي</h2>
+            </div>
+            <div class="hint-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                لتغيير إجابتك، انقري على المصطلح داخل الفراغ وسيعود للأسفل.
+            </div>
+            <div class="code-area">
+                <div class="code-block">
+                    <!-- While row -->
+                    <div class="while-row">
+                        <div id="target-condition" class="drop-zone" data-answer="condition"></div>
+                        <span class="pressed-label">is pressed</span>
+                        <div class="key-chip">any key</div>
+                        <span class="while-label">While</span>
+                    </div>
+                    <!-- Body -->
+                    <div class="body-section">
+                        <div class="body-row">
+                            <span class="none-label">&lt;None&gt;</span>
+                            <div id="target-begin" class="drop-zone" data-answer="begin"></div>
+                            <span class="body-label">:Begin</span>
+                        </div>
+                        <div class="body-row">
+                            <span class="none-label">&lt;None&gt;</span>
+                            <div id="target-during" class="drop-zone" data-answer="during"></div>
+                            <span class="body-label">:During</span>
+                        </div>
+                        <div class="body-row">
+                            <span class="none-label">&lt;None&gt;</span>
+                            <div id="target-end" class="drop-zone" data-answer="end"></div>
+                            <span class="body-label">:End</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Labels Bank -->
+        <div class="col-1-3">
+            <div class="labels-bank-title">بنك المصطلحات</div>
+            <div id="labels-container">
+                <div id="label-begin" data-id="begin" class="drag-item" style="background:#8b5cf6;color:white;">بداية التكرار (Begin)</div>
+                <div id="label-during" data-id="during" class="drag-item" style="background:#10b981;color:white;">أثناء التكرار (During)</div>
+                <div id="label-condition" data-id="condition" class="drag-item" style="background:#fbbf24;color:#78350f;">الشرط (Condition)</div>
+                <div id="label-end" data-id="end" class="drag-item" style="background:#f43f5e;color:white;">نهاية التكرار (End)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 2: MCQ -->
+    <div class="card mcq-card" style="margin-bottom:24px;">
+        <div class="section-header">
+            <span class="badge">درجتان</span>
+            <h2 class="section-title">2. اختر الإجابة الصحيحة</h2>
+        </div>
+        <div>
+            <!-- Q1 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <p class="question-text">س1: ما هو الجزء المسؤول عن "التحقق" من استمرارية التكرار أو توقفه؟</p>
+                    <span class="badge badge-orange" style="margin-right:12px;white-space:nowrap;">درجة واحدة</span>
+                </div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" data-q="1" data-val="A">أ) جزء الشرط (Condition)</div>
+                    <div class="mcq-option" data-q="1" data-val="B">ب) جزء البداية (Begin)</div>
+                </div>
+            </div>
+            <!-- Q2 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <p class="question-text">س2: أي جزء يتم تنفيذه "مرة واحدة فقط" عندما يتوقف الشرط عن التحقق؟</p>
+                    <span class="badge badge-orange" style="margin-right:12px;white-space:nowrap;">درجة واحدة</span>
+                </div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" data-q="2" data-val="A">أ) جزء أثناء التكرار (During)</div>
+                    <div class="mcq-option" data-q="2" data-val="B">ب) جزء نهاية التكرار (End)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+        <button id="btn-submit">إرسال الإجابات النهائية</button>
+        <div id="result-card" class="hidden">
+            <h3>النتيجة النهائية</h3>
+            <span id="score-text">0 / 6</span>
+        </div>
+    </div>
+
+    <!-- Correction Panel (shown after submit) -->
+    <div id="correction-panel" class="hidden">
+        <div class="correction-title">📋 تصحيح إجاباتكِ</div>
+        <div id="correction-content"></div>
+    </div>
+</div>
+
+<!-- ===== TEACHER DASHBOARD ===== -->
+<div id="teacher-dashboard" class="hidden">
+    <div class="teacher-header">
+        <div class="stats">
+            <span id="stat-count" class="stat-chip">الطالبات: 0</span>
+            <span id="stat-avg" class="stat-chip">المتوسط: —</span>
+            <button id="btn-refresh-teacher" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 16px;border-radius:50px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.2s;" title="تحديث يدوي">🔄 تحديث</button>
+        </div>
+        <h1>لوحة المعلمة 👩‍🏫</h1>
+        <button id="btn-close-teacher" class="btn-close-teacher">إغلاق</button>
+    </div>
+    <div class="teacher-body">
+        <div class="teacher-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th style="text-align:center;">الدرجة</th>
+                        <th style="text-align:center;">وقت الإرسال</th>
+                        <th style="text-align:center;">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="teacher-table-body">
+                    <tr><td colspan="4"><div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M17 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <p>لا توجد إجابات بعد. انتظري إرسال الطالبات لإجاباتهن.</p>
+                    </div></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DETAIL MODAL ===== -->
+<div id="detail-modal" class="hidden">
+    <div class="detail-box">
+        <div class="detail-header">
+            <button class="btn-close-detail" id="btn-close-detail">إغلاق</button>
+            <h2 id="detail-name">اسم الطالبة</h2>
+        </div>
+        <div class="detail-body" id="detail-body"></div>
+    </div>
+</div>
+
+<script>
+    // ====== STATE ======
+    let studentName = "";
+    let mcqAnswers = { 1: null, 2: null };
+    let dragAnswers = { condition: null, begin: null, during: null, end: null };
+    let selectedLabel = null;
+    let resultsData = [];
+    let submitted = false;
+
+    // ====== STORAGE HELPERS (localStorage) ======
+    const STORAGE_KEY = 'while-activity-results-v2';
+    let teacherRefreshInterval = null;
+
+    function saveResult(record) {
+        try {
+            let existing = loadResults();
+            existing.push(record);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+        } catch(e) { console.error('Storage save error:', e); }
+    }
+
+    function loadResults() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) return JSON.parse(raw);
+        } catch(e) {}
+        return [];
+    }
+
+    function deleteResult(index) {
+        try {
+            let existing = loadResults();
+            existing.splice(index, 1);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+        } catch(e) { console.error('Storage delete error:', e); }
+    }
+
+    // ====== INTERACTIVE LABELS ======
+    function setupInteractive() {
+        const container = document.getElementById('labels-container');
+        const labels = container.querySelectorAll('.drag-item');
+        const zones = document.querySelectorAll('.drop-zone');
+
+        labels.forEach(label => {
+            label.addEventListener('click', () => {
+                if (submitted) return;
+                if (label.parentElement === container) {
+                    document.querySelectorAll('.drag-item').forEach(l => l.classList.remove('selected'));
+                    selectedLabel = label;
+                    label.classList.add('selected');
+                }
+            });
+        });
+
+        zones.forEach(zone => {
+            zone.addEventListener('click', () => {
+                if (submitted) return;
+                const zoneKey = zone.getAttribute('data-answer');
+                if (zone.children.length > 0) {
+                    const existing = zone.children[0];
+                    container.appendChild(existing);
+                    existing.classList.remove('selected');
+                    dragAnswers[zoneKey] = null;
+                    zone.classList.remove('has-item');
+                    if (selectedLabel) {
+                        zone.appendChild(selectedLabel);
+                        dragAnswers[zoneKey] = selectedLabel.getAttribute('data-id');
+                        selectedLabel.classList.remove('selected');
+                        selectedLabel = null;
+                        zone.classList.add('has-item');
+                    }
+                } else if (selectedLabel) {
+                    zone.appendChild(selectedLabel);
+                    dragAnswers[zoneKey] = selectedLabel.getAttribute('data-id');
+                    selectedLabel.classList.remove('selected');
+                    selectedLabel = null;
+                    zone.classList.add('has-item');
+                }
+            });
+        });
+    }
+
+    // ====== MCQ ======
+    function setupMCQ() {
+        document.querySelectorAll('.mcq-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                if (submitted) return;
+                const q = opt.getAttribute('data-q');
+                document.querySelectorAll(`.mcq-option[data-q="${q}"]`).forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                mcqAnswers[q] = opt.getAttribute('data-val');
+            });
+        });
+    }
+
+    // ====== SHOW CORRECTION ON STUDENT SCREEN ======
+    function showStudentCorrection(score) {
+        // Lock all interactions
+        submitted = true;
+        document.querySelectorAll('.drag-item').forEach(l => l.classList.add('disabled'));
+
+        // Highlight drop zones
+        const correctZones = { condition: 'condition', begin: 'begin', during: 'during', end: 'end' };
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            const key = zone.getAttribute('data-answer');
+            const isCorrect = dragAnswers[key] === correctZones[key];
+
+            // Remove any previous indicators
+            zone.querySelectorAll('.zone-indicator').forEach(el => el.remove());
+
+            if (dragAnswers[key]) {
+                zone.classList.add(isCorrect ? 'zone-correct' : 'zone-wrong');
+                const ind = document.createElement('span');
+                ind.className = 'zone-indicator ' + (isCorrect ? 'correct' : 'wrong');
+                ind.textContent = isCorrect ? '✓' : '✗';
+                zone.appendChild(ind);
+            }
+        });
+
+        // Highlight MCQ options
+        const correctMCQ = { 1: 'A', 2: 'B' };
+        [1, 2].forEach(q => {
+            document.querySelectorAll(`.mcq-option[data-q="${q}"]`).forEach(opt => {
+                opt.classList.add('disabled');
+                const val = opt.getAttribute('data-val');
+                if (val === correctMCQ[q]) {
+                    // Always highlight the correct answer
+                    opt.classList.add('mcq-reveal');
+                } else if (opt.classList.contains('selected')) {
+                    // Wrong selected answer
+                    opt.classList.add('mcq-wrong');
+                }
+            });
+        });
+
+        // Build correction panel
+        const dragZones = ['condition', 'begin', 'during', 'end'];
+        const dragLabels = {
+            condition: 'الشرط (While Condition)',
+            begin: 'بداية التكرار (Begin)',
+            during: 'أثناء التكرار (During)',
+            end: 'نهاية التكرار (End)'
+        };
+        const dragCorrectNames = {
+            condition: 'الشرط (Condition)',
+            begin: 'بداية التكرار (Begin)',
+            during: 'أثناء التكرار (During)',
+            end: 'نهاية التكرار (End)'
+        };
+
+        let dragCorrHTML = dragZones.map(z => {
+            const isCorrect = dragAnswers[z] === z;
+            const answered = dragAnswers[z] ? dragCorrectNames[dragAnswers[z]] : 'لم تُجب';
+            return `<div class="correction-item ${isCorrect ? 'correct' : 'wrong'}">
+                <div class="ci-label">
+                    <div>${dragLabels[z]}</div>
+                    <div style="font-size:12px;margin-top:2px;opacity:0.8;">إجابتك: ${answered}</div>
+                    ${!isCorrect ? `<div class="ci-correct-ans">✔ الصحيحة: ${dragCorrectNames[z]}</div>` : ''}
+                </div>
+                <span class="ci-status">${isCorrect ? '✅' : '❌'}</span>
+            </div>`;
+        }).join('');
+
+        const q1Correct = mcqAnswers[1] === 'A';
+        const q2Correct = mcqAnswers[2] === 'B';
+        const q1Ans = mcqAnswers[1] === 'A' ? 'أ) جزء الشرط' : mcqAnswers[1] === 'B' ? 'ب) جزء البداية' : 'لم تُجب';
+        const q2Ans = mcqAnswers[2] === 'B' ? 'ب) جزء نهاية التكرار' : mcqAnswers[2] === 'A' ? 'أ) جزء أثناء التكرار' : 'لم تُجب';
+
+        const correctionContent = document.getElementById('correction-content');
+        correctionContent.innerHTML = `
+            <div style="margin-bottom:14px;font-weight:700;color:var(--slate-600);font-size:14px;">النشاط العملي (4 درجات)</div>
+            <div class="correction-grid" style="margin-bottom:20px;">${dragCorrHTML}</div>
+            <div style="margin-bottom:14px;font-weight:700;color:var(--slate-600);font-size:14px;">أسئلة الاختيار من متعدد (2 درجات)</div>
+            <div class="correction-grid">
+                <div class="correction-item ${q1Correct ? 'correct' : 'wrong'}">
+                    <div class="ci-label">
+                        <div>س1: الجزء المسؤول عن التحقق</div>
+                        <div style="font-size:12px;margin-top:2px;opacity:0.8;">إجابتك: ${q1Ans}</div>
+                        ${!q1Correct ? '<div class="ci-correct-ans">✔ الصحيحة: أ) جزء الشرط</div>' : ''}
+                    </div>
+                    <span class="ci-status">${q1Correct ? '✅' : '❌'}</span>
+                </div>
+                <div class="correction-item ${q2Correct ? 'correct' : 'wrong'}">
+                    <div class="ci-label">
+                        <div>س2: الجزء الذي يُنفَّذ مرة واحدة</div>
+                        <div style="font-size:12px;margin-top:2px;opacity:0.8;">إجابتك: ${q2Ans}</div>
+                        ${!q2Correct ? '<div class="ci-correct-ans">✔ الصحيحة: ب) جزء نهاية التكرار</div>' : ''}
+                    </div>
+                    <span class="ci-status">${q2Correct ? '✅' : '❌'}</span>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:22px;padding-top:18px;border-top:2px solid var(--blue-50);">
+                <span style="font-size:15px;color:var(--slate-500);">درجتك الإجمالية</span>
+                <div style="font-size:52px;font-weight:900;color:var(--blue-600);">${score} / 6</div>
+            </div>
+        `;
+
+        document.getElementById('correction-panel').classList.remove('hidden');
+        // Scroll to correction panel
+        setTimeout(() => {
+            document.getElementById('correction-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 400);
+    }
+
+    // ====== SUBMIT ======
+    function submit() {
+        const score =
+            (dragAnswers.condition === 'condition' ? 1 : 0) +
+            (dragAnswers.begin === 'begin' ? 1 : 0) +
+            (dragAnswers.during === 'during' ? 1 : 0) +
+            (dragAnswers.end === 'end' ? 1 : 0) +
+            (mcqAnswers[1] === 'A' ? 1 : 0) +
+            (mcqAnswers[2] === 'B' ? 1 : 0);
+
+        document.getElementById('btn-submit').classList.add('hidden');
+        document.getElementById('result-card').classList.remove('hidden');
+        document.getElementById('score-text').textContent = `${score} / 6`;
+        document.getElementById('celeb-score').textContent = `${score} / 6`;
+
+        // Celebration message
+        let icon = '🌟', title = 'أحسنتِ يا بطلة!', text = 'لقد أتممتِ النشاط بنجاح مذهل!';
+        if (score === 6) { icon = '🏆'; title = 'ممتاز يا نجمة!'; text = 'حصلتِ على الدرجة الكاملة! رائع جداً!'; }
+        else if (score >= 4) { icon = '⭐'; title = 'أحسنتِ!'; text = 'أداء جيد جداً، استمري بالتعلم!'; }
+        else { icon = '💪'; title = 'حاولي مرة أخرى!'; text = 'لا بأس، التعلم رحلة مستمرة!'; }
+
+        document.getElementById('celeb-icon').textContent = icon;
+        document.getElementById('celeb-title').textContent = title;
+        document.getElementById('celeb-text').textContent = text;
+        document.getElementById('celeb-modal').classList.remove('hidden');
+
+        // Save to shared storage
+        const record = {
+            studentName,
+            score,
+            dragAnswers: {...dragAnswers},
+            mcqAnswers: {...mcqAnswers},
+            timestamp: Date.now()
+        };
+        saveResult(record);
+
+        // Show correction when modal is closed
+        document.getElementById('btn-close-celeb').onclick = () => {
+            document.getElementById('celeb-modal').classList.add('hidden');
+            showStudentCorrection(score);
+        };
+    }
+
+    // ====== TEACHER DASHBOARD ======
+    function getScoreBadgeClass(score) {
+        if (score >= 5) return 'high';
+        if (score >= 3) return 'mid';
+        return 'low';
+    }
+
+    function formatTime(ts) {
+        const d = new Date(ts);
+        return d.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderTeacherTable(data) {
+        const tbody = document.getElementById('teacher-table-body');
+        const statCount = document.getElementById('stat-count');
+        const statAvg = document.getElementById('stat-avg');
+
+        if (data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M17 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <p>لا توجد إجابات بعد.</p>
+            </div></td></tr>`;
+            statCount.textContent = 'الطالبات: 0';
+            statAvg.textContent = 'المتوسط: —';
+            return;
+        }
+
+        const avg = (data.reduce((a, r) => a + r.score, 0) / data.length).toFixed(1);
+        statCount.textContent = `الطالبات: ${data.length}`;
+        statAvg.textContent = `المتوسط: ${avg} / 6`;
+
+        tbody.innerHTML = '';
+        data.forEach((r, i) => {
+            const cls = getScoreBadgeClass(r.score);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${r.studentName}</td>
+                <td style="text-align:center;"><span class="score-badge ${cls}">${r.score} / 6</span></td>
+                <td style="text-align:center;color:var(--slate-400);font-size:13px;">${formatTime(r.timestamp)}</td>
+                <td style="text-align:center;">
+                    <button class="btn-view" data-index="${i}">عرض النتائج</button>
+                    <button class="btn-delete" data-index="${i}" title="حذف إجابة الطالبة">🗑 حذف</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Bind view buttons
+        tbody.querySelectorAll('.btn-view').forEach(btn => {
+            btn.addEventListener('click', () => showDetail(data[parseInt(btn.getAttribute('data-index'))]));
+        });
+
+        // Bind delete buttons
+        tbody.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-index'));
+                const name = data[idx].studentName;
+                if (confirm(`هل تريدين حذف إجابة الطالبة "${name}"؟`)) {
+                    deleteResult(idx);
+                    resultsData = loadResults();
+                    resultsData.sort((a, b) => b.timestamp - a.timestamp);
+                    renderTeacherTable(resultsData);
+                }
+            });
+        });
+    }
+
+    function getAnswerLabel(key) {
+        const map = { condition: 'الشرط (Condition)', begin: 'بداية التكرار (Begin)', during: 'أثناء التكرار (During)', end: 'نهاية التكرار (End)' };
+        return map[key] || key;
+    }
+
+    function showDetail(r) {
+        document.getElementById('detail-name').textContent = r.studentName;
+        const body = document.getElementById('detail-body');
+
+        const dragZones = ['condition', 'begin', 'during', 'end'];
+        let dragHTML = dragZones.map(z => {
+            const correct = r.dragAnswers[z] === z;
+            const answer = r.dragAnswers[z] ? getAnswerLabel(r.dragAnswers[z]) : 'لم تُجب';
+            const correctAns = getAnswerLabel(z);
+            return `<div class="answer-row ${correct ? 'correct' : 'wrong'}">
+                <div>
+                    <div class="answer-label">${z === 'condition' ? 'الشرط (While)' : z === 'begin' ? 'بداية التكرار' : z === 'during' ? 'أثناء التكرار' : 'نهاية التكرار'}</div>
+                    <div class="answer-detail">إجابتها: ${answer}${!correct ? ` • الصحيحة: ${correctAns}` : ''}</div>
+                </div>
+                <span class="answer-status">${correct ? '✅' : '❌'}</span>
+            </div>`;
+        }).join('');
+
+        const q1Correct = r.mcqAnswers[1] === 'A';
+        const q2Correct = r.mcqAnswers[2] === 'B';
+        const q1Ans = r.mcqAnswers[1] === 'A' ? 'أ) جزء الشرط' : r.mcqAnswers[1] === 'B' ? 'ب) جزء البداية' : 'لم تُجب';
+        const q2Ans = r.mcqAnswers[2] === 'B' ? 'ب) جزء نهاية التكرار' : r.mcqAnswers[2] === 'A' ? 'أ) جزء أثناء التكرار' : 'لم تُجب';
+
+        body.innerHTML = `
+            <div class="answer-section">
+                <h3>النشاط العملي (4 درجات)</h3>
+                ${dragHTML}
+            </div>
+            <div class="answer-section">
+                <h3>أسئلة الاختيار من متعدد (2 درجات)</h3>
+                <div class="answer-row ${q1Correct ? 'correct' : 'wrong'}">
+                    <div>
+                        <div class="answer-label">س1: الجزء المسؤول عن التحقق</div>
+                        <div class="answer-detail">إجابتها: ${q1Ans}${!q1Correct ? ' • الصحيحة: أ) جزء الشرط' : ''}</div>
+                    </div>
+                    <span class="answer-status">${q1Correct ? '✅' : '❌'}</span>
+                </div>
+                <div class="answer-row ${q2Correct ? 'correct' : 'wrong'}">
+                    <div>
+                        <div class="answer-label">س2: الجزء الذي يُنفَّذ مرة واحدة</div>
+                        <div class="answer-detail">إجابتها: ${q2Ans}${!q2Correct ? ' • الصحيحة: ب) جزء نهاية التكرار' : ''}</div>
+                    </div>
+                    <span class="answer-status">${q2Correct ? '✅' : '❌'}</span>
+                </div>
+            </div>
+            <div class="detail-score">
+                <div class="detail-score-label">الدرجة الإجمالية</div>
+                <div class="detail-score-num">${r.score} / 6</div>
+            </div>
+        `;
+        document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    async function openTeacherDashboard() {
+        document.getElementById('teacher-auth-modal').classList.add('hidden');
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('teacher-dashboard').classList.remove('hidden');
+        resultsData = loadResults();
+        resultsData.sort((a, b) => b.timestamp - a.timestamp);
+        renderTeacherTable(resultsData);
+
+        // Auto-refresh every 5 seconds to catch new student submissions
+        if (teacherRefreshInterval) clearInterval(teacherRefreshInterval);
+        teacherRefreshInterval = setInterval(() => {
+            const fresh = loadResults();
+            fresh.sort((a, b) => b.timestamp - a.timestamp);
+            if (JSON.stringify(fresh) !== JSON.stringify(resultsData)) {
+                resultsData = fresh;
+                renderTeacherTable(resultsData);
+            }
+        }, 5000);
+    }
+
+    // ====== INIT ======
+    document.addEventListener('DOMContentLoaded', () => {
+        setupInteractive();
+        setupMCQ();
+
+        // Start button
+        document.getElementById('btn-start').addEventListener('click', () => {
+            const name = document.getElementById('student-name').value.trim();
+            if (!name) { document.getElementById('name-error').classList.add('show'); return; }
+            studentName = name;
+            document.getElementById('setup-screen').classList.add('hidden');
+            const mc = document.getElementById('main-content');
+            mc.classList.remove('hidden');
+            setTimeout(() => mc.classList.remove('opacity-0'), 50);
+        });
+
+        document.getElementById('student-name').addEventListener('input', () => {
+            document.getElementById('name-error').classList.remove('show');
+        });
+
+        // Submit
+        document.getElementById('btn-submit').addEventListener('click', submit);
+
+        // Teacher flow
+        document.getElementById('btn-outer-teacher').addEventListener('click', () => {
+            document.getElementById('teacher-auth-modal').classList.remove('hidden');
+            document.getElementById('teacher-password').value = '';
+            document.getElementById('pass-error').classList.remove('show');
+        });
+
+        document.getElementById('btn-cancel-teacher').addEventListener('click', () => {
+            document.getElementById('teacher-auth-modal').classList.add('hidden');
+        });
+
+        document.getElementById('btn-login-teacher').addEventListener('click', () => {
+            const pw = document.getElementById('teacher-password').value;
+            if (pw === '1234') {
+                openTeacherDashboard();
+            } else {
+                document.getElementById('pass-error').classList.add('show');
+            }
+        });
+
+        document.getElementById('teacher-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('btn-login-teacher').click();
+        });
+
+        document.getElementById('btn-close-teacher').addEventListener('click', () => {
+            document.getElementById('teacher-dashboard').classList.add('hidden');
+            if (teacherRefreshInterval) { clearInterval(teacherRefreshInterval); teacherRefreshInterval = null; }
+            if (studentName) {
+                document.getElementById('main-content').classList.remove('hidden');
+            } else {
+                document.getElementById('setup-screen').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('btn-close-detail').addEventListener('click', () => {
+            document.getElementById('detail-modal').classList.add('hidden');
+        });
+
+        document.getElementById('btn-refresh-teacher').addEventListener('click', () => {
+            resultsData = loadResults();
+            resultsData.sort((a, b) => b.timestamp - a.timestamp);
+            renderTeacherTable(resultsData);
+        });
+    });
+</script>
+</body>
+</html>
